@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>
+<!-- 
+ /*
+ * Copyright 2010 the original author or authors.
+ * Copyright 2010 SorcerSoft.org.
+ *  
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<project name="SSU2 Build" default="all" basedir=".">
+	<property name="module.name" value="ssu2" />
+	<property name="module.run.dir" value="ssu2" />
+
+	<!-- set global properties -->
+	<import file="../../../common-build.xml" />
+	<property name="src" value="./src" />
+	<property name="resources" value="./resources" />
+
+
+    <!-- The test sources to compile -->
+    <patternset id="junit-ant.java">
+        <include name="sorcer/ssu2/junit/*.java" />
+        <exclude name="**/SAVE/*.java" />
+        <exclude name="**/BAK/*.java" />
+    </patternset>
+
+	<!-- The sources to compile -->
+	<patternset id="ant.java">
+		<include name="sorcer/ssu2/**/*.java" />
+		<exclude name="**/SAVE/*.java" />
+		<exclude name="**/BAK/*.java" />
+	</patternset>
+
+	<fileset dir="${resources}" id="icons">
+		<include name="sorcer.jpg" />
+	</fileset>
+
+	<patternset id="ant.classes">
+		<include name="sorcer/provider/**/*.class" />
+	</patternset>
+
+	<patternset id="ant.jars">
+		<include name="partner-ssu2-cc.jar" />
+		<include name="jeri-ssu2.jar" />
+        <include name="jeri-ssu2-dl.jar" />
+		<include name="ssu2-requestor.jar" />
+		<include name="ssu2-requestor-dl.jar" />
+	</patternset>
+
+	<path id="project.classpath">
+		<pathelement location="${classes}" />
+		<pathelement location="${sorcer.lib}/sorcer-lib.jar" />
+		<pathelement location="${support.lib}/junit.jar" />
+		<path refid="jini.path" />
+		<path refid="rio.path" />
+	</path>
+
+	<path id="javadocs.classpath">
+		<pathelement location="${common.lib}/rio/serviceui-1.1a.jar" />
+		<pathelement location="${common.lib}/rio/ant-ext.jar" />
+		<pathelement location="${ant.home}/lib/ant.jar" />
+	</path>
+
+	<!-- No RMI stubs are required for JERI type of providers -->
+	<target name="compile" depends="compileSources" />
+	<target name="jars" depends="ssu2, copy-run-prv-files" />
+	<target name="ssu2" depends="jeri-ssu2.jar, jeri-ssu2-dl.jar, ssu2-requestor.jar, ssu2-requestor-dl.jar" />
+	<target name="all" depends="prepare, jars" />
+
+	<target name="ssu2-requestor.jar">
+		<classdepandjar jarfile="${sorcer.lib}/ssu2-requestor.jar" files="true">
+			<classpath refid="project.classpath" />
+			<in name="sorcer.ssu2" />
+			<topclass name="sorcer.ssu2.requestor.HoareTester" />
+			<fileset dir="${iGrid.home}/configs" includes="sorcer/util/sorcer.env" />
+		</classdepandjar>
+	</target>
+
+	<target name="ssu2-requestor-dl.jar">
+		<classdepandjar jarfile="${sorcer.lib}/ssu2-requestor-dl.jar" files="true">
+			<classpath refid="project.classpath" />
+			<in name="sorcer.ssu2.provider" />
+			<topclass name="sorcer.ssu2.provider.HoareImpl" />
+			<topclass name="sorcer.ssu2.provider.ServiceHoare" />
+		</classdepandjar>
+	</target>
+
+	<target name="jeri-ssu2.jar" depends="compile">
+		<classdepandjar jarfile="${sorcer.lib}/jeri-ssu2.jar" files="true" debug="false">
+			<classpath refid="project.classpath" />
+			<in name="sorcer.ssu2.provider" />
+			<topclass name="sorcer.ssu2.provider.HoareProvider" />
+			<topclass name="sorcer.ssu2.provider.ServiceHoare" />
+            <topclass name="sorcer.ssu2.provider.HoareImpl" />
+			<fileset dir="${iGrid.home}/configs">
+				<filename name="sorcer/util/sorcer.env" />
+				<filename name="sorcer/util/data.formats" />
+			</fileset>
+			<fileset refid="icons" />
+		</classdepandjar>
+	</target>
+
+	<!-- No RMI stubs are required for JERI type of providers -->
+	<target name="jeri-ssu2-dl.jar" depends="compile">
+		<classdepandjar jarfile="${sorcer-dl.lib}/jeri-ssu2-dl.jar" files="true" debug="false">
+			<classpath refid="project.classpath" />
+			<in name="sorcer.ssu2.provider" />
+			<topclass name="sorcer.ssu2.provider.Hoare" />
+			<topclass name="sorcer.ssu2.provider.ServiceHoare" />
+			<fileset refid="icons" />
+		</classdepandjar>
+	</target>
+
+
+	<target name="docs" depends="prepare, compile">
+		<javadoc packagenames="org.jini.rio.tools.ant.*" maxmemory="100M" sourcepath="${src}" destdir="${docs}/api" Author="true" Version="true" Use="true" windowtitle="SSU2 Example" doctitle="&lt;h1&gt;Arithmetic Examples;/h1&gt;" bottom="&lt;i&gt;Copyright (c) 2002-2006 Texas tech University, All Rights Reserved.&lt;/i&gt;">
+			<group title="Partner ssu2 Example" packages="sorcer.provider.ssu2.*" />
+			<classpath refid="project.classpath" />
+		</javadoc>
+	</target>
+
+	<target name="copy-run-prv-files">
+		<mkdir dir="${iGrid.home}/bin/examples/${module.run.dir}/configs" />
+		<mkdir dir="${iGrid.home}/bin/examples/${module.run.dir}/bin" />
+		<mkdir dir="${iGrid.home}/bin/examples/${module.run.dir}/policy" />
+		<mkdir dir="${iGrid.home}/bin/examples/${module.run.dir}/logs" />
+		<copy todir="${iGrid.home}/bin/examples/${module.run.dir}/configs">
+			<fileset dir="configs">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<copy todir="${iGrid.home}/bin/examples/${module.run.dir}/bin">
+			<fileset dir="bin">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<copy todir="${iGrid.home}/bin/examples/${module.run.dir}/policy">
+			<fileset dir="policy">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<chmod dir="${iGrid.home}/bin/examples/${module.run.dir}/bin" perm="755" includes="*.sh" />
+	</target>
+
+</project>
