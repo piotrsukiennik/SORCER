@@ -66,7 +66,7 @@ public class HoareProvider extends ServiceTasker implements Hoare,
 			}
 			logger.info(selector + " result: \n" +result );
 			String outputMessage = "processed by " + getHostname();
-			context.putValue(selector  + CPS + ServiceHoare.SEARCH + CPS + ServiceHoare.PRIME, result);
+			context.putValue(selector  + CPS + ServiceHoare.ARRAY + CPS + ServiceHoare.K_LARGEST, result);
 			context.putValue( ServiceHoare.COMMENT, outputMessage);
 		} catch (Exception ex) {
 			throw new sorcer.ssu2.provider.HoareException(ex);

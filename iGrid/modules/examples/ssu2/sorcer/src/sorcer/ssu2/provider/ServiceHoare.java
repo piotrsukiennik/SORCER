@@ -14,5 +14,5 @@ public interface ServiceHoare extends Remote {
     public final static String COMMENT = "comment";
     public final static String ARRAY = "array";
     public final static String K = "k";
-    public final static String PRIME = "prime";
+    public final static String K_LARGEST = "k_largest";
 }

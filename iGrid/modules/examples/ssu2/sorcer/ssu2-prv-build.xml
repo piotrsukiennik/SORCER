@@ -129,7 +129,7 @@
             <classpath refid="project.classpath" />
             <in name="sorcer.ssu2" />
             <in name="sorcer.ui" />
-            <topclass name="sorcer.ssu2.provider.ui.mvc.SortView" />
+            <topclass name="sorcer.ssu2.provider.ui.mvc.HoareView" />
             <topclass name="sorcer.ui.serviceui.UIComponentFactory" />
         </classdepandjar>
     </target>

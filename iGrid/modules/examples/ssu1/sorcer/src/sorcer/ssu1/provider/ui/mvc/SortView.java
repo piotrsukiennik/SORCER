@@ -51,20 +51,26 @@ public class SortView extends JPanel implements Observer {
 
 	private JPanel buildAccountPanel() {
         JPanel panel = new JPanel();
-        JPanel actionPanel = new JPanel(new GridLayout(3, 3));
+        JPanel actionPanel = new JPanel(new GridLayout(2, 3));
 
-        actionPanel.add(new JLabel("Result:"));
-        resultTextField = new JTextField();
-        resultTextField.setEnabled( false );
-        actionPanel.add( resultTextField );
 
-        actionPanel.add(new JLabel("Input array:"));
         inputTextField = new JTextField();
-        actionPanel.add( inputTextField );
         JButton sortButton = new JButton("Sort");
         sortButton.setActionCommand( SortModel.SORT );
         sortButton.addActionListener( dispatcher );
+
+        actionPanel.add( new JLabel( "Input array:" ) );
+        actionPanel.add( inputTextField );
         actionPanel.add( sortButton );
+
+
+        resultTextField = new JTextField();
+        resultTextField.setEnabled( false );
+
+        actionPanel.add(new JLabel("Result:"));
+        actionPanel.add( resultTextField );
+        actionPanel.add(new JLabel(" sorted"));
+
         panel.add(actionPanel);
         return panel;
 	}

@@ -61,7 +61,7 @@ public class FirstPrimeProvider extends ServiceTasker implements FirstPrime, Ser
 			}
 			logger.info(selector + " result: \n" +result );
 			String outputMessage = "processed by " + getHostname();
-			context.putValue(selector  + CPS + ServiceFirstPrime.SEARCH + CPS + ServiceFirstPrime.PRIME, result);
+			context.putValue(selector  + CPS + ServiceFirstPrime.K + CPS + ServiceFirstPrime.PRIME, result);
 			context.putValue( ServiceFirstPrime.COMMENT, outputMessage);
 		} catch (Exception ex) {
 			throw new FirstPrimeException(ex);

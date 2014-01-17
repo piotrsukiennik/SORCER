@@ -1,12 +1,14 @@
 package sorcer.ssu1.provider;
 
+import java.util.Arrays;
+
 public class MergeSortImpl implements Sort {
 
     private int[] values;
     private int[] tmp;
 
     public int[] sort(int[] base)  throws SortException {
-        this.values = base;
+        this.values = Arrays.copyOf( base, base.length );
         this.tmp = new int[base.length];
         mergeSort(0, base.length - 1);
         return values;

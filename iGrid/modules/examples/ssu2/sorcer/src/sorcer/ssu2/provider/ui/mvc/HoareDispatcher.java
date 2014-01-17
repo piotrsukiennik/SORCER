@@ -15,19 +15,19 @@ public class HoareDispatcher implements ActionListener {
 
 	private HoareView view;
 
-	private Hoare account;
+	private Hoare hoare;
 
-	public HoareDispatcher( HoareModel model, HoareView view, Hoare account ) {
+	public HoareDispatcher( HoareModel model, HoareView view, Hoare hoare ) {
 		this.model = model;
 		this.view = view;
-		this.account = account;
+		this.hoare = hoare;
 	}
 
 	private void search() {
 		try {
 			model.setInput( view.getInput() );
             model.setK( view.getK() );
-            model.setResult( account.search( model.getInput(), model.getK() ) );
+            model.setResult( hoare.search( model.getInput(), model.getK() ) );
 		} catch (Exception exception) {
 			System.out.println("Couldn't talk to account. Error was \n "
 					+ exception);

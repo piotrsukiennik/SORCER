@@ -33,7 +33,7 @@ public class HoareView extends JPanel implements Observer {
 
 	public HoareView( Object provider ) {
 		super();
-		getAccessibleContext().setAccessibleName("FirstPrimeView Tester");
+		getAccessibleContext().setAccessibleName("HoareView Tester");
 		ServiceItem item = (ServiceItem) provider;
 
 		if (item.service instanceof Hoare) {
@@ -54,23 +54,32 @@ public class HoareView extends JPanel implements Observer {
         JPanel panel = new JPanel();
         JPanel actionPanel = new JPanel(new GridLayout(3, 3));
 
-        actionPanel.add(new JLabel("Result:"));
-        resultTextField = new JTextField();
-        resultTextField.setEnabled( false );
-        actionPanel.add( resultTextField );
+        inputTextField = new JTextField();
 
         actionPanel.add(new JLabel("Input array:"));
-        inputTextField = new JTextField();
         actionPanel.add( inputTextField );
+        actionPanel.add(new JLabel(""));
 
-
-        actionPanel.add(new JLabel("K param:"));
         inputTextFieldK = new JTextField();
-        actionPanel.add( inputTextFieldK );
+
         JButton searchButton = new JButton("Search");
         searchButton.setActionCommand( HoareModel.SEARCH );
         searchButton.addActionListener( dispatcher );
+
+        actionPanel.add(new JLabel("K param:"));
+        actionPanel.add( inputTextFieldK );
         actionPanel.add( searchButton );
+
+
+
+        resultTextField = new JTextField();
+        resultTextField.setEnabled( false );
+
+        actionPanel.add(new JLabel("Result:"));
+        actionPanel.add( resultTextField );
+        actionPanel.add(new JLabel(" is k largest. "));
+
+
 
         panel.add(actionPanel);
         return panel;
@@ -104,14 +113,15 @@ public class HoareView extends JPanel implements Observer {
         }
         return null;
     }
-    private int readTextFieldForK(JTextField moneyField) {
+    private int readTextFieldForK(JTextField field) {
         try {
-            String text = moneyField.getText();
-            return Integer.parseInt( text );
+            String text = field.getText();
+            return Integer.parseInt( text.trim() );
         } catch (Exception e) {
             logger.info("Field doesn't contain a valid value");
         }
-        return -1;
+        field.setText( "1" );
+        return 1;
     }
 
 	public void update(Observable o, Object arg) {
@@ -119,9 +129,6 @@ public class HoareView extends JPanel implements Observer {
 		if (arg != null) {
 			if ( HoareModel.RESULT.equals( arg )){
                 displayResult();
-            }
-			else if ( HoareModel.INPUT.equals( arg )){
-
             }
 		}
 	}

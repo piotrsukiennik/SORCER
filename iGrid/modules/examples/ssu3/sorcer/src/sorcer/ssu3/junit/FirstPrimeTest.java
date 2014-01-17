@@ -1,22 +1,38 @@
 package sorcer.ssu3.junit;
 
-import junit.framework.TestCase;
-import sorcer.ssu3.provider.FirstPrime;
-import sorcer.ssu3.provider.FirstPrimeException;
-import sorcer.ssu3.provider.FirstPrimeImpl;
+import org.junit.Test;
+import sorcer.core.SorcerConstants;
+import sorcer.service.Context;
+import sorcer.service.ServiceExertion;
+import sorcer.service.Task;
+import sorcer.ssu3.provider.ServiceFirstPrime;
+import sorcer.util.Sorcer;
+import java.rmi.RMISecurityManager;
+import static org.junit.Assert.assertEquals;
+import static sorcer.eo.operator.*;
+import static sorcer.eo.operator.value;
 
-import java.rmi.RemoteException;
+public class FirstPrimeTest implements SorcerConstants {
 
-public class FirstPrimeTest extends TestCase {
+    static {
+        ServiceExertion.debug = true;
+        System.setProperty("java.security.policy", Sorcer.getHome() + "/configs/policy.all");
+        System.setSecurityManager(new RMISecurityManager());
+        Sorcer.setCodeBase(new String[] { "jeri-ssu3-dl.jar" });
+        System.out.println("CLASSPATH :" + System.getProperty("java.class.path"));
+        System.setProperty("java.protocol.handler.pkgs", "sorcer.util.url|org.rioproject.url");
+    }
 
-    public void testFirstPrimeNumber() throws RemoteException, FirstPrimeException{
-        FirstPrime fpn = new FirstPrimeImpl();
-        assertEquals(1, fpn.search(0));
-        assertEquals(2, fpn.search(1));
-        assertEquals(3, fpn.search(2));
-        assertEquals(5, fpn.search(3));
-        assertEquals(5, fpn.search(3));
-        assertEquals(10007, fpn.search(9990));
-        assertEquals(214748383, fpn.search(214748364));
+    @Test
+    public void testFirstPrimeNumber() throws Exception {
+        Integer k=9990;
+        Integer shouldBe = 10007;
+        Task t1 = task("t1",
+         sig("search", ServiceFirstPrime.class, "SSU3"),
+         context("ssu3-sort-test1", in( "search/k", k  )));
+        Context context = (Context) value( t1 );
+        Integer kPrime = (Integer)context.get( "search/k/prime" );
+        System.out.println(context);
+        assertEquals( shouldBe, kPrime );
     }
 }

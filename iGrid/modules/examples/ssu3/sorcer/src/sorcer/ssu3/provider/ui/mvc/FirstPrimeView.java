@@ -50,25 +50,30 @@ public class FirstPrimeView extends JPanel implements Observer {
 
 	private JPanel buildAccountPanel() {
         JPanel panel = new JPanel();
-        JPanel actionPanel = new JPanel(new GridLayout(3, 3));
+        JPanel actionPanel = new JPanel(new GridLayout(2, 3));
 
-        actionPanel.add(new JLabel("Result:"));
-        resultTextField = new JTextField();
-        resultTextField.setEnabled( false );
-        actionPanel.add( resultTextField );
 
-        actionPanel.add(new JLabel("Which prime:"));
+
         inputTextFieldK = new JTextField();
-        actionPanel.add( inputTextFieldK );
         JButton searchButton = new JButton("Search");
         searchButton.setActionCommand( FirstPrimeModel.SEARCH );
         searchButton.addActionListener( dispatcher );
+
+
+        actionPanel.add( new JLabel( "Which prime:" ) );
+        actionPanel.add( inputTextFieldK );
         actionPanel.add( searchButton );
+
+        resultTextField = new JTextField();
+        resultTextField.setEnabled( false );
+
+        actionPanel.add(new JLabel("Result:"));
+        actionPanel.add( resultTextField );
+        actionPanel.add(new JLabel(""));
 
         panel.add(actionPanel);
         return panel;
 	}
-
 
     public int getK() {
         return readTextFieldForK( inputTextFieldK );
@@ -76,19 +81,22 @@ public class FirstPrimeView extends JPanel implements Observer {
 
 
 	public void displayResult() {
-		int result = model.getResult();
-		resultTextField.setText( Integer.toString( result ) );
+		Integer result = model.getResult();
+		resultTextField.setText( result.toString() );
 	}
 
 
-    private int readTextFieldForK(JTextField moneyField) {
+    private int readTextFieldForK(JTextField field) {
         try {
-            String text = moneyField.getText();
-            return Integer.parseInt( text );
+            String text = field.getText();
+            Integer textParsed =  Integer.valueOf( text.trim() );
+            inputTextFieldK.setText( textParsed.toString() );
+            return textParsed;
         } catch (Exception e) {
             logger.info("Field doesn't contain a valid value");
         }
-        return -1;
+        field.setText( "1" );
+        return 1;
     }
 
 	public void update(Observable o, Object arg) {
@@ -97,9 +105,7 @@ public class FirstPrimeView extends JPanel implements Observer {
 			if ( FirstPrimeModel.RESULT.equals( arg )){
                 displayResult();
             }
-			else if ( FirstPrimeModel.INPUT.equals( arg )){
 
-            }
 		}
 	}
 

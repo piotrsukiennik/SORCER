@@ -17,8 +17,17 @@
 	<!-- set global properties -->
 	<import file="../../common-build.xml" />
 	<property name="src" value="./src" />
+	<property name="junit.src" value="./src" />
 
 	<property name="resources" value="./resources" />
+
+	<!-- The sources to compile -->
+	<patternset id="junit-ant.java">
+		<include name="sorcer/ex5/provider/**/*.java" />
+		<include name="sorcer/ex5/junit/**/*.java" />
+		<exclude name="**/SAVE/*.java" />
+		<exclude name="**/BAK/*.java" />
+	</patternset>
 
 	<!-- The sources to compile -->
 	<patternset id="ant.java">
