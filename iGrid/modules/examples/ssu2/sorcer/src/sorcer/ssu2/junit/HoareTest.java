@@ -34,9 +34,9 @@ public class HoareTest implements SorcerConstants {
           in( "search/array", base ),
           in( "search/k", 2 )
          ) );
-        Context context = (Context) value( t1 );
-        Integer kLargest = (Integer)context.get( "search/array/k_largest" );
-        System.out.println(context);
+        t1 = exert(t1);
+        Integer kLargest =  (Integer) get( t1,"search/array/k_largest" );
+        System.out.println( context(t1) );
         assertEquals( kLargest, secondLargest );
     }
 
@@ -49,10 +49,12 @@ public class HoareTest implements SorcerConstants {
           in( "search/array", base),
           in( "search/k", base.length+1)
          ));
-        Context context = (Context) value( t2 );
-        Integer kLargest = (Integer)context.get( "search/array/k_largest" );
-        System.out.println(context);
+        t2 = exert(t2);
+        Integer kLargest = (Integer) get(t2, "search/array/k_largest" );
+        System.out.println(context(t2));
         assertNull(kLargest);
         //ha.search(base, base.length + 1);
     }
+
+
 }

@@ -30,9 +30,9 @@ public class FirstPrimeTest implements SorcerConstants {
         Task t1 = task("t1",
          sig("search", ServiceFirstPrime.class, "SSU3"),
          context("ssu3-sort-test1", in( "search/k", k  )));
-        Context context = (Context) value( t1 );
-        Integer kPrime = (Integer)context.get( "search/k/prime" );
-        System.out.println(context);
+        t1 = exert(t1);
+        Integer kPrime = (Integer)get(t1,  "search/k/prime" );
+        System.out.println(context(t1));
         assertEquals( shouldBe, kPrime );
     }
 }
